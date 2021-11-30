@@ -64,7 +64,7 @@ listSchema.map(({ name, schema }) => keystone.createList(name, schema));
 
 const authStrategy = keystone.createAuthStrategy({
   type: PasswordAuthStrategy,
-  list: "User",
+  list: "Manager",
 });
 
 module.exports = {

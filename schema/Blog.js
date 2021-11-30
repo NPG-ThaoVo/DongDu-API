@@ -24,8 +24,8 @@ const Blog = {
     access: {
         read: true,
         update: access.userIsAdminOrOwner,
-        create: access.userIsAdmin,
-        delete: access.userIsAdmin,
+        create: access.userIsAdminOrOwner,
+        delete: access.userIsAdminOrOwner,
         auth: true
     }
 }

@@ -24,11 +24,10 @@ const User = {
   },
   // List-level access controls
   access: {
-    read: true,
+    read:  access.userIsAdminOrOwner,
     update: access.userIsAdminOrOwner,
     create: access.userIsAdminOrOwner,
     delete: access.userIsAdmin,
-    auth: true
   }
 }
 

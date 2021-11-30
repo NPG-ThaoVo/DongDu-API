@@ -14,8 +14,8 @@ const Contact = {
     },
     access: {
         read: true,
-        update: access.userIsAdminOrOwner,
-        create: access.userIsAdminOrOwner,
+        update: true,
+        create: true,
         delete: access.userIsAdminOrOwner,
     },
 };

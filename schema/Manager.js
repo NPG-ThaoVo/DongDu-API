@@ -21,7 +21,7 @@ const User = {
     },
     // List-level access controls
     access: {
-        read: access.userIsAdminOrOwner,
+        read: access.userIsAdmin,
         update: access.userIsAdmin,
         create: access.userIsAdmin,
         delete: access.userIsAdmin,

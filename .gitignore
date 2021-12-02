@@ -3,5 +3,5 @@
 /napa-website-data/data
 yarn-error.log
 webpack.config.js
-# yarn.lock
+yarn.lock
 package-lock.json

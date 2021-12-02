@@ -1,17 +1,27 @@
-const { Text } = require("@keystonejs/fields");
+const { Text, Relationship } = require("@keystonejs/fields");
 const access = require("../access.control");
-const { reply } = require("../emails");
 
-const Contact = {
+const Major = {
   fields: {
+    // id: { type: AutoIncrement },
     name: { type: Text },
+    user: {
+      type: Relationship,
+      ref: "User.major",
+      many: true,
+      access: {
+        create: false,
+        update: false,
+        delete: false,
+      },
+    },
   },
   access: {
     read: true,
-    update: access.userIsAdmin,
-    create: access.userIsAdmin,
-    delete: access.userIsAdmin,
+    update: access.managerIsAdmin,
+    create: access.managerIsAdmin,
+    delete: access.managerIsAdmin,
   },
 };
 
-module.exports = Contact;
+module.exports = Major;

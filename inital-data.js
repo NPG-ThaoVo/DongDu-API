@@ -3,16 +3,16 @@ const { createItems } = require("@keystonejs/server-side-graphql-client");
 const UserInitialData = [
   {
     data: {
-      name: "Admin",
-      email: "admin@example.com",
+      fullname: "Administrator",
+      username: "Admin",
       password: "admin@123",
-      isAdmin: true,
+      role: "admin",
     },
   },
 ];
 
 const initialAction = async (keystone) => {
-  await createItems({ keystone, listKey: "User", items: UserInitialData });
+  await createItems({ keystone, listKey: "Manager", items: UserInitialData });
 };
 
 module.exports = { UserInitialData, initialAction };

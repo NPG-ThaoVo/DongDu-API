@@ -4,13 +4,7 @@ const { AdminUIApp } = require("@keystonejs/app-admin-ui");
 const { MongooseAdapter: Adapter } = require("@keystonejs/adapter-mongoose");
 const { PasswordAuthStrategy } = require("@keystonejs/auth-password");
 
-const {
-  PROJECT_NAME,
-  COOKIE_SECRET,
-  DB_CONNECTION,
-  DB_CONNECTION_ON_DOCKER,
-  DB_CONNECTION_ON_CLOUD,
-} = require("./config");
+const { PROJECT_NAME, COOKIE_SECRET, DB_CONNECTION } = require("./config");
 
 const UserSchema = require("./schema/User");
 const ManagerSchema = require("./schema/Manager");
@@ -19,18 +13,14 @@ const MajorSchema = require("./schema/Major");
 const CommentSchema = require("./schema/Comment");
 const BlogSchema = require("./schema/Blog");
 const { initialAction } = require("./inital-data");
+const access = require("./access.control");
 
-const mongoUri = process.env.DOCKER
-  ? DB_CONNECTION_ON_DOCKER
-  : process.env.NODE_ENV == "development"
-  ? DB_CONNECTION_ON_CLOUD
-  : DB_CONNECTION;
+const mongoUri =
+  process.env.NODE_ENV == "development" ? DB_CONNECTION : DB_CONNECTION;
 
 const adapterConfig = {
   mongoUri: mongoUri,
 };
-
-// console.log("Database URI:", mongoUri);
 
 const keystone = new Keystone({
   adapter: new Adapter(adapterConfig),
@@ -51,12 +41,7 @@ const listSchema = [
   { name: "Manager", schema: ManagerSchema },
   { name: "Major", schema: MajorSchema },
   { name: "Contact", schema: ContactSchema },
-  // { name: "Customer", schema: CustomerSchema },
-  // { name: "New", schema: NewSchema },
   { name: "Comment", schema: CommentSchema },
-  // { name: "History", schema: HistorySchema },
-  // { name: "Milestone", schema: MilestoneSchema },
-  // { name: "Event", schema: EventSchema },
   { name: "Blog", schema: BlogSchema },
 ];
 
@@ -65,6 +50,19 @@ listSchema.map(({ name, schema }) => keystone.createList(name, schema));
 const authStrategy = keystone.createAuthStrategy({
   type: PasswordAuthStrategy,
   list: "Manager",
+  config: {
+    identityField: "username",
+    secretField: "password",
+  },
+});
+
+const authUserStrategy = keystone.createAuthStrategy({
+  type: PasswordAuthStrategy,
+  list: "User",
+  config: {
+    identityField: "username",
+    secretField: "password",
+  },
 });
 
 module.exports = {
@@ -75,6 +73,14 @@ module.exports = {
       name: PROJECT_NAME,
       enableDefaultRoute: true,
       authStrategy,
+      isAccessAllowed: ({ authentication: { item, listkey } }) => {
+        // console.log(item);
+        return !!item && item.role === "admin";
+      },
+    }),
+    new AdminUIApp({
+      enableDefaultRoute: true,
+      authStrategy: authUserStrategy,
     }),
   ],
 };

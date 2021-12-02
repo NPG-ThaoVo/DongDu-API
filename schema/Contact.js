@@ -9,10 +9,10 @@ const Contact = {
     content: { type: Text },
   },
   access: {
-    read: access.userIsAdmin,
-    update: access.userIsAdmin,
+    read: access.managerIsAdminOrStaff,
+    update: access.managerIsAdmin,
     create: true,
-    delete: access.userIsAdmin,
+    delete: access.managerIsAdmin,
   },
 };
 

@@ -4,6 +4,7 @@ const {
   CalendarDay,
   Relationship,
   Checkbox,
+  Select,
 } = require("@keystonejs/fields");
 const { CloudinaryImage } = require("@keystonejs/fields-cloudinary-image");
 const { managerIsAdminOrStaff } = require("../access.control");
@@ -13,11 +14,13 @@ const orgImgAdapter = imageSet("OBDDImage");
 
 const User = {
   fields: {
-    username: { type: Text, isUnique: true },
+    username: { type: Text, isUnique: true, isRequired: true },
     password: {
       type: Password,
+      isRequired: true,
     },
     fullname: { type: Text },
+    email: { type: Text, isRequired: true },
     avatar: { type: CloudinaryImage, adapter: orgImgAdapter },
     gender: { type: Text },
     yearOfBirth: { type: Text },
@@ -46,6 +49,15 @@ const User = {
         update: managerIsAdminOrStaff,
         delete: false,
       },
+    },
+    provider: {
+      type: Select,
+      defaultValue: "local",
+      options: [
+        { value: "local", label: "Signup with account" },
+        { value: "facebook", label: "Signup with Facebook" },
+        { value: "google", label: "Signup with Google" },
+      ],
     },
   },
   labelField: "fullname",

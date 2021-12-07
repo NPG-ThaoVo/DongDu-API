@@ -17,10 +17,9 @@ const User = {
     username: { type: Text, isUnique: true, isRequired: true },
     password: {
       type: Password,
-      isRequired: true,
     },
     fullname: { type: Text },
-    email: { type: Text, isRequired: true },
+    email: { type: Text },
     avatar: { type: CloudinaryImage, adapter: orgImgAdapter },
     gender: { type: Text },
     yearOfBirth: { type: Text },
@@ -59,6 +58,7 @@ const User = {
         { value: "google", label: "Signup with Google" },
       ],
     },
+    socialInfo: { type: Text }
   },
   labelField: "fullname",
   // List-level access controls

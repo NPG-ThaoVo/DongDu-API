@@ -3,6 +3,8 @@ const { GraphQLApp } = require("@keystonejs/app-graphql");
 const { AdminUIApp } = require("@keystonejs/app-admin-ui");
 const { MongooseAdapter: Adapter } = require("@keystonejs/adapter-mongoose");
 const { PasswordAuthStrategy } = require("@keystonejs/auth-password");
+const { StaticApp } = require("@keystonejs/app-static");
+// const express = require("express");
 
 const { PROJECT_NAME, COOKIE_SECRET, DB_CONNECTION } = require("./config");
 
@@ -13,7 +15,7 @@ const MajorSchema = require("./schema/Major");
 const CommentSchema = require("./schema/Comment");
 const BlogSchema = require("./schema/Blog");
 const { initialAction } = require("./inital-data");
-const access = require("./access.control");
+// const access = require("./access.control");
 
 const mongoUri =
   process.env.NODE_ENV == "development" ? DB_CONNECTION : DB_CONNECTION;
@@ -82,5 +84,13 @@ module.exports = {
       enableDefaultRoute: true,
       authStrategy: authUserStrategy,
     }),
+    new StaticApp({
+      path: "/",
+      src: "public",
+      // fallback: 'index.html',
+    }),
   ],
+  // configureExpress: (app) => {
+  //   app.use(express.static("public"));
+  // },
 };

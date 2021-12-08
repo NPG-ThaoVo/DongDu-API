@@ -41,6 +41,10 @@ const Blog = {
     // auth: true,
   },
   hooks: {
+    resolveInput: ({ resolvedData, context, operation, ...others }) => {
+      if (operation === "create") resolvedData.author = context.authedItem.id;
+      return resolvedData;
+    },
     afterDelete: hooks.removeExistingFile,
   },
 };

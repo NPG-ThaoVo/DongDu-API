@@ -14,6 +14,7 @@ const ContactSchema = require("./schema/Contact");
 const MajorSchema = require("./schema/Major");
 const CommentSchema = require("./schema/Comment");
 const BlogSchema = require("./schema/Blog");
+const StatisticalSchema = require("./schema/Statistical");
 const { initialAction } = require("./inital-data");
 // const access = require("./access.control");
 
@@ -45,6 +46,7 @@ const listSchema = [
   { name: "Contact", schema: ContactSchema },
   { name: "Comment", schema: CommentSchema },
   { name: "Blog", schema: BlogSchema },
+  { name: "Statistical", schema: StatisticalSchema },
 ];
 
 listSchema.map(({ name, schema }) => keystone.createList(name, schema));

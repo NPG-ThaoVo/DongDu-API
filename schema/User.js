@@ -32,6 +32,7 @@ const User = {
     yearOfBirth: { type: Text },
     course: { type: Text },
     majorDetail: { type: Text },
+    academicYear : { type: Text },
     note: { type: Text },
     major: {
       type: Relationship,
@@ -46,9 +47,9 @@ const User = {
         delete: false,
       },
     },
-    OBDD: {
+    OBOG: {
       type: Checkbox,
-      label: "OBDD",
+      label: "OBOG",
       defaultValue: false,
       access: {
         // read: true,

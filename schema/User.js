@@ -46,9 +46,9 @@ const User = {
         delete: false,
       },
     },
-    OBDD: {
+    OBOG: {
       type: Checkbox,
-      label: "OBDD",
+      label: "OBOG",
       defaultValue: false,
       access: {
         // read: true,

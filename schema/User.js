@@ -32,7 +32,6 @@ const User = {
     yearOfBirth: { type: Text },
     course: { type: Text },
     majorDetail: { type: Text },
-    academicYear : { type: Text },
     note: { type: Text },
     major: {
       type: Relationship,

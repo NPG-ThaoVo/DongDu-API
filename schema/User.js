@@ -14,7 +14,7 @@ const orgImgAdapter = imageSet("OBDDImage");
 
 const User = {
   fields: {
-    username: { type: Text, isUnique: true, isRequired: true },
+    username: { type: Text, isUnique: true },
     password: {
       type: Password,
     },
@@ -49,6 +49,7 @@ const User = {
         delete: false,
       },
     },
+    socialId: { type: Text, },
     provider: {
       type: Select,
       defaultValue: "local",
@@ -58,7 +59,8 @@ const User = {
         { value: "google", label: "Signup with Google" },
       ],
     },
-    socialInfo: { type: Text }
+    socialInfo: { type: Text },
+    googleId: { type: Text },
   },
   labelField: "fullname",
   // List-level access controls

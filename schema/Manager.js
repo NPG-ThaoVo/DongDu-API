@@ -1,8 +1,14 @@
-const { Text, Password, CalendarDay, Select } = require("@keystonejs/fields");
-const { CloudinaryImage } = require("@keystonejs/fields-cloudinary-image");
+const {
+  Text,
+  Password,
+  CalendarDay,
+  Select,
+  File,
+} = require("@keystonejs/fields");
 const access = require("../access.control");
-const { imageSet } = require("./ImageCloud");
-const orgImgAdapter = imageSet("OBDDImage");
+const { initFileAdapter } = require("./localFileAdapter");
+
+const { fileAdapter, hooks } = initFileAdapter();
 
 const User = {
   fields: {
@@ -11,7 +17,13 @@ const User = {
       type: Password,
     },
     fullname: { type: Text },
-    avatar: { type: CloudinaryImage, adapter: orgImgAdapter },
+    avatar: {
+      type: File,
+      adapter: fileAdapter,
+      hooks: {
+        beforeChange: hooks.removeExistingFile,
+      },
+    },
     gender: { type: Text },
     yearOfBirth: { type: Text },
     createdAt: {
@@ -36,6 +48,9 @@ const User = {
     create: access.managerIsAdmin,
     delete: access.managerIsAdmin,
     auth: true,
+  },
+  hooks: {
+    afterDelete: hooks.removeExistingFile,
   },
 };
 

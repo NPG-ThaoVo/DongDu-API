@@ -5,12 +5,13 @@ const {
   Relationship,
   Checkbox,
   Select,
+  File,
 } = require("@keystonejs/fields");
-const { CloudinaryImage } = require("@keystonejs/fields-cloudinary-image");
 const { managerIsAdminOrStaff } = require("../access.control");
 const access = require("../access.control");
-const { imageSet } = require("./ImageCloud");
-const orgImgAdapter = imageSet("OBDDImage");
+const { initFileAdapter } = require("./localFileAdapter");
+
+const { fileAdapter, hooks } = initFileAdapter();
 
 const User = {
   fields: {
@@ -20,7 +21,13 @@ const User = {
     },
     fullname: { type: Text },
     email: { type: Text },
-    avatar: { type: CloudinaryImage, adapter: orgImgAdapter },
+    avatar: {
+      type: File,
+      adapter: fileAdapter,
+      hooks: {
+        beforeChange: hooks.removeExistingFile,
+      },
+    },
     gender: { type: Text },
     yearOfBirth: { type: Text },
     course: { type: Text },
@@ -39,9 +46,9 @@ const User = {
         delete: false,
       },
     },
-    OBDD: {
+    OBOG: {
       type: Checkbox,
-      label: "OBDD",
+      label: "OBOG",
       defaultValue: false,
       access: {
         // read: true,
@@ -60,7 +67,6 @@ const User = {
       ],
     },
     socialInfo: { type: Text },
-    googleId: { type: Text },
   },
   labelField: "fullname",
   // List-level access controls
@@ -70,6 +76,9 @@ const User = {
     create: true,
     delete: access.managerIsAdminOrStaff,
     auth: true,
+  },
+  hooks: {
+    afterDelete: hooks.removeExistingFile,
   },
 };
 

@@ -1,6 +1,7 @@
 /node_modules
 /dist
 /napa-website-data/data
+/public
 yarn-error.log
 webpack.config.js
 yarn.lock

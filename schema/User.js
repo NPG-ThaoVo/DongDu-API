@@ -15,7 +15,7 @@ const { fileAdapter, hooks } = initFileAdapter();
 
 const User = {
   fields: {
-    username: { type: Text, isUnique: true, isRequired: true },
+    username: { type: Text, isUnique: true },
     password: {
       type: Password,
     },
@@ -56,6 +56,7 @@ const User = {
         delete: false,
       },
     },
+    socialId: { type: Text, },
     provider: {
       type: Select,
       defaultValue: "local",

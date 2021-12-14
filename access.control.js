@@ -20,7 +20,7 @@ const userOwnsItem = ({ authentication: { item: user } }) => {
 };
 
 const userIsOwnerOrAdminOrStaff = (auth) => {
-  return userOwnsItem(auth) || managerIsAdminOrStaff(auth);
+  return managerIsAdminOrStaff(auth) || userOwnsItem(auth) ;
 };
 
 const access = {

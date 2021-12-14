@@ -15,9 +15,10 @@ const { fileAdapter, hooks } = initFileAdapter();
 
 const User = {
   fields: {
-    username: { type: Text, isUnique: true },
+    username: { type: Text, isUnique: true, access: { read: access.userIsOwnerOrAdminOrStaff } },
     password: {
       type: Password,
+      access: { read: access.userIsOwnerOrAdminOrStaff }
     },
     fullname: { type: Text, access: { read: true } },
     email: { type: Text, access: { read: true } },
@@ -44,6 +45,7 @@ const User = {
       type: CalendarDay,
       dateFrom: "2001-01-16",
       access: {
+        read: access.userIsOwnerOrAdminOrStaff,
         update: false,
         delete: false,
       },
@@ -53,13 +55,12 @@ const User = {
       label: "OBOG",
       defaultValue: false,
       access: {
-        // read: true,
+        read: true,
         update: managerIsAdminOrStaff,
         delete: false,
       },
-      access: { read: true }
     },
-    socialId: { type: Text, },
+    socialId: { type: Text, access: { read: access.userIsOwnerOrAdminOrStaff }},
     provider: {
       type: Select,
       defaultValue: "local",
@@ -68,13 +69,14 @@ const User = {
         { value: "facebook", label: "Signup with Facebook" },
         { value: "google", label: "Signup with Google" },
       ],
+      access: { read: access.userIsOwnerOrAdminOrStaff }
     },
-    socialInfo: { type: Text },
+    socialInfo: { type: Text, access: { read: access.userIsOwnerOrAdminOrStaff } },
   },
   labelField: "fullname",
   // List-level access controls
   access: {
-    read: access.userIsOwnerOrAdminOrStaff,
+    read: true,
     update: access.userIsOwnerOrAdminOrStaff,
     create: true,
     delete: access.managerIsAdminOrStaff,

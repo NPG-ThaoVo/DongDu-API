@@ -8,6 +8,9 @@ const { StaticApp } = require("@keystonejs/app-static");
 
 const { PROJECT_NAME, COOKIE_SECRET, DB_CONNECTION } = require("./config");
 
+const { FIND_SOCIAL_USER } = require("./queries/query");
+const { CREATE_SOCIAL_USER } = require("./queries/mutation")
+
 const UserSchema = require("./schema/User");
 const ManagerSchema = require("./schema/Manager");
 const ContactSchema = require("./schema/Contact");
@@ -69,6 +72,58 @@ const authUserStrategy = keystone.createAuthStrategy({
   },
 });
 
+keystone.extendGraphQLSchema({
+  mutations: [
+    {
+      schema:
+        "authenticateUserWithSocialId(id: String!, user: UserCreateInput): authenticateUserOutput",
+      resolver: async (parent, { id, user }, context, info, extra) => {
+        try {
+          const { data, error, ...others } = await context.executeGraphQL({
+            query: FIND_SOCIAL_USER,
+            variables: {
+              socialId: id,
+            },
+            context: context.createContext({ skipAccessControl: true }),
+          });
+          if (error) {
+            throw error;
+          }
+          if (!data?.allUsers[0]) {
+            const { data, error, ...others } = await context.executeGraphQL({
+              query: CREATE_SOCIAL_USER,
+              variables: {
+                socialId: id,
+                fullname: user.fullname,
+                provider: user.provider,
+                email: user.email,
+                socialInfo: user.socialInfo,
+              },
+              context: context.createContext({ skipAccessControl: true }),
+            });
+            if (error) {
+              throw error;
+            }
+            // console.log(data.createUser);
+            const item = data.createUser;
+            const token = await context.startAuthedSession({
+              item,
+              list: { key: "User" },
+            });
+            return { item, token };
+          };
+          const item = data.allUsers[0];
+          const token = await context.startAuthedSession({
+            item,
+            list: { key: "User" },
+          });
+
+          return { item, token };
+        } catch (err) { throw err }
+      },
+    },
+  ],
+});
 
 module.exports = {
   keystone,
@@ -87,6 +142,10 @@ module.exports = {
       enableDefaultRoute: true,
       authStrategy: authUserStrategy,
     }),
+    // new AdminUIApp({
+    //   enableDefaultRoute: true,
+    //   authStrategy: authSocialUserStrategy,
+    // }),
     new StaticApp({
       path: "/",
       src: "public",

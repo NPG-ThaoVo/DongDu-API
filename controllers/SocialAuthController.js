@@ -1,21 +1,21 @@
 const { CLIENT_URL } = require('../config');
 const { keystone } = require('../index');
 const { FIND_SOCIAL_USER } = require('../queries/query');
-const { CREATE_SOCIAL_USER } = require('../queries/mutation');
+const { CREATE_SOCIAL_USER, AUTHENTICATION_USER } = require('../queries/mutation');
 const context = keystone.createContext().sudo()
 
 
 class SocialAuthController {
   async authenticate(req, res, next) {
     const authUser = req?.user;
-    const { data, errors } = await context.executeGraphQL({
+    const { data } = await context.executeGraphQL({
       query: FIND_SOCIAL_USER,
       variables: {
         socialId: req?.user?.id
       },
     });
     if (data?.allUsers?.length === 0) {
-      const { data, errors } = await context.executeGraphQL({
+      await context.executeGraphQL({
         query: CREATE_SOCIAL_USER,
         variables: {
           socialId: authUser.id,
@@ -25,11 +25,17 @@ class SocialAuthController {
           socialInfo: JSON.stringify(authUser),
         },
       });
-      console.log('new user', data);
-    } else {
-      console.log('old user', data?.allUsers[0]);
     }
-    res.redirect(CLIENT_URL)
+    const { data: loginUser,  errors, ...others } = await context.executeGraphQL({
+      query: AUTHENTICATION_USER,
+      variables: {
+        username: authUser.id,
+        password: authUser.id
+      },
+    });
+    console.log('errors', errors);
+    // console.log('token', loginUser);
+    res.redirect(`${CLIENT_URL}?token=${loginUser?.authenticateUserWithPassword?.token}`)
   }
 }
 

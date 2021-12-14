@@ -19,24 +19,26 @@ const User = {
     password: {
       type: Password,
     },
-    fullname: { type: Text },
-    email: { type: Text },
+    fullname: { type: Text, access: { read: true } },
+    email: { type: Text, access: { read: true } },
     avatar: {
       type: File,
       adapter: fileAdapter,
       hooks: {
         beforeChange: hooks.removeExistingFile,
       },
+      access: { read: true }
     },
-    gender: { type: Text },
-    yearOfBirth: { type: Text },
-    course: { type: Text },
-    majorDetail: { type: Text },
-    note: { type: Text },
+    gender: { type: Text, access: { read: true } },
+    yearOfBirth: { type: Text, access: { read: true } },
+    course: { type: Text, access: { read: true } },
+    majorDetail: { type: Text, access: { read: true } },
+    note: { type: Text, access: { read: true } },
     major: {
       type: Relationship,
       ref: "Major.user",
       many: false,
+      access: { read: true }
     },
     createdAt: {
       type: CalendarDay,
@@ -55,6 +57,7 @@ const User = {
         update: managerIsAdminOrStaff,
         delete: false,
       },
+      access: { read: true }
     },
     socialId: { type: Text, },
     provider: {
@@ -71,7 +74,7 @@ const User = {
   labelField: "fullname",
   // List-level access controls
   access: {
-    read: true,
+    read: access.userIsOwnerOrAdminOrStaff,
     update: access.userIsOwnerOrAdminOrStaff,
     create: true,
     delete: access.managerIsAdminOrStaff,

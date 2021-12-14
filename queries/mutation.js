@@ -11,6 +11,7 @@ mutation CreateUser(
   createUser(
     data: {
       username: $socialId
+      password: $socialId
       fullname: $fullname
       socialId: $socialId
       provider: $provider
@@ -18,6 +19,7 @@ mutation CreateUser(
       socialInfo: $socialInfo
     }
   ) {
+    id
     username
     socialId
     fullname
@@ -28,4 +30,14 @@ mutation CreateUser(
 }
 `;
 
-module.exports = { CREATE_SOCIAL_USER }
+const AUTHENTICATION_USER = gql`
+  mutation authentication($username: String, $password: String) {
+    authenticateUserWithPassword(username: $username, password: $password) {
+      token
+    } 
+  }
+`;
+
+const FIND_SOCIAL_USER = 
+
+module.exports = { CREATE_SOCIAL_USER, AUTHENTICATION_USER }

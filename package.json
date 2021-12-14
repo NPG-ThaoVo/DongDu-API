@@ -41,7 +41,6 @@
     "http": "^0.0.1-security",
     "js": "^0.1.0",
     "nodemailer": "^6.6.3",
-    "parser": "^0.1.4",
     "passport": "^0.5.0",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0"

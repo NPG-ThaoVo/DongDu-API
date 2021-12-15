@@ -104,7 +104,7 @@ module.exports = {
     ...adminUI,
     new StaticApp({
       path: "/",
-      src: "public",
+      src: "./public",
       // fallback: 'index.html',
     }),
   ],

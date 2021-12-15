@@ -9,9 +9,10 @@ const ROOT_PASSWORD = "Password1";
 
 const DB_CONNECTION = `mongodb+srv://${ROOT_USERNAME}:${ROOT_PASSWORD}@cluster0.vsfsl.gcp.mongodb.net/dongdudatabase?retryWrites=true&w=majority`;
 // uri cloud           mongodb+srv://root:Password1@cluster0.vsfsl.gcp.mongodb.net/dongdudatabase?retryWrites=true&w=majority
-
+const CLIENT_URL = process.env.NODE_ENV === 'production' ? "https://dong-du.vercel.app/" : "http://localhost:3000";
 module.exports = {
   PROJECT_NAME,
   COOKIE_SECRET,
   DB_CONNECTION,
+  CLIENT_URL
 };

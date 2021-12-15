@@ -22,9 +22,9 @@ const Blog = {
         beforeChange: hooks.removeExistingFile,
       },
     },
-    author: { type: Relationship, ref: "Manager", many: false },
+    author: { type: Relationship, ref: "Manager" },
     status: { type: Checkbox },
-    major: { type: Relationship, ref: "Major", many: false },
+    major: { type: Relationship, ref: "Major" },
     majorDetails: { type: Text },
     comment: { type: Relationship, ref: "Comment.blog", many: true },
     publishedAt: {

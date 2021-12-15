@@ -4,9 +4,12 @@ const { AdminUIApp } = require("@keystonejs/app-admin-ui");
 const { MongooseAdapter: Adapter } = require("@keystonejs/adapter-mongoose");
 const { PasswordAuthStrategy } = require("@keystonejs/auth-password");
 const { StaticApp } = require("@keystonejs/app-static");
-// const express = require("express");
+const extendGrapQL = require("./extendGraphQL");
 
 const { PROJECT_NAME, COOKIE_SECRET, DB_CONNECTION } = require("./config");
+
+const { FIND_SOCIAL_USER } = require("./queries/query");
+const { CREATE_SOCIAL_USER } = require("./queries/mutation");
 
 const UserSchema = require("./schema/User");
 const ManagerSchema = require("./schema/Manager");
@@ -18,8 +21,9 @@ const StatisticalSchema = require("./schema/Statistical");
 const { initialAction } = require("./inital-data");
 // const access = require("./access.control");
 
-const mongoUri =
-  process.env.NODE_ENV == "development" ? DB_CONNECTION : DB_CONNECTION;
+const mode = process.env.NODE_ENV == "development";
+
+const mongoUri = mode ? DB_CONNECTION : DB_CONNECTION;
 
 const adapterConfig = {
   mongoUri: mongoUri,
@@ -27,6 +31,7 @@ const adapterConfig = {
 
 const keystone = new Keystone({
   adapter: new Adapter(adapterConfig),
+  // sessionStore: ,
   onConnect: process.env.INIT_DATA && initialAction,
   cookieSecret: COOKIE_SECRET,
   cookie: {
@@ -69,30 +74,38 @@ const authUserStrategy = keystone.createAuthStrategy({
   },
 });
 
+const adminUIForUser = new AdminUIApp({
+  name: PROJECT_NAME,
+  enableDefaultRoute: true,
+  authStrategy: authUserStrategy,
+});
+
+const adminUIForManager = new AdminUIApp({
+  name: PROJECT_NAME,
+  enableDefaultRoute: true,
+  authStrategy,
+  isAccessAllowed: ({ authentication: { item, listkey } }) => {
+    // console.log(item);
+    return !!item && item.role === "admin";
+  },
+});
+
+// I dont know why it works, if we don't change the order based on ENV, we wont be able to access the AdminUI
+const adminUI = mode
+  ? [adminUIForManager, adminUIForUser]
+  : [adminUIForUser, adminUIForManager];
+
+keystone.extendGraphQLSchema(extendGrapQL);
+
 module.exports = {
   keystone,
   apps: [
     new GraphQLApp(),
-    new AdminUIApp({
-      name: PROJECT_NAME,
-      enableDefaultRoute: true,
-      authStrategy,
-      isAccessAllowed: ({ authentication: { item, listkey } }) => {
-        // console.log(item);
-        return !!item && item.role === "admin";
-      },
-    }),
-    new AdminUIApp({
-      enableDefaultRoute: true,
-      authStrategy: authUserStrategy,
-    }),
+    ...adminUI,
     new StaticApp({
       path: "/",
       src: "public",
       // fallback: 'index.html',
     }),
   ],
-  // configureExpress: (app) => {
-  //   app.use(express.static("public"));
-  // },
 };

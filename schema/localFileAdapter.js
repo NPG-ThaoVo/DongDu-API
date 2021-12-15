@@ -10,7 +10,11 @@ const initFileAdapter = (src = "./public/resource", path = "/resource") => {
     // this function is not working
     // console.log("existingItem", existingItem);
     if (existingItem && existingItem.image) {
-      await fileAdapter.delete(existingItem.image);
+      try {
+        await fileAdapter.delete(existingItem.image);
+      } catch (e) {
+        console.warn("[Warning] Unable delete file: ", e);
+      }
     }
   };
 

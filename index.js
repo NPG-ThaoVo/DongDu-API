@@ -8,9 +8,6 @@ const extendGrapQL = require("./extendGraphQL");
 
 const { PROJECT_NAME, COOKIE_SECRET, DB_CONNECTION } = require("./config");
 
-const { FIND_SOCIAL_USER } = require("./queries/query");
-const { CREATE_SOCIAL_USER } = require("./queries/mutation");
-
 const UserSchema = require("./schema/User");
 const ManagerSchema = require("./schema/Manager");
 const ContactSchema = require("./schema/Contact");

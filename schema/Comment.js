@@ -4,7 +4,7 @@ const access = require("../access.control");
 const Comment = {
   fields: {
     content: { type: Text },
-    // user: { type: Relationship, ref: "User", many: false },
+    user: { type: Relationship, ref: "User", many: false },
     blog: { type: Relationship, ref: "Blog.comment", many: false },
     fullname: { type: Text },
     email: { type: Text },

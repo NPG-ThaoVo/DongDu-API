@@ -1,6 +1,9 @@
 const { LocalFileAdapter } = require("@keystonejs/file-adapters");
 
-const initFileAdapter = (src = "./public/resource", path = "/resource") => {
+const mode = process.env.NODE_ENV == "development";
+const pathToSave = mode ? "./public/resource" : "./dist/public/resource";
+
+const initFileAdapter = (src = pathToSave, path = "/resource") => {
   const fileAdapter = new LocalFileAdapter({
     src,
     path,

@@ -16,7 +16,7 @@ const Comment = {
   access: {
     read: true,
     update: access.userIsOwnerOrAdminOrStaff,
-    create: access.userIsOwnerOrAdminOrStaff,
+    // create: access.userIsOwnerOrAdminOrStaff,
     delete: access.managerIsAdminOrStaff,
   },
 };

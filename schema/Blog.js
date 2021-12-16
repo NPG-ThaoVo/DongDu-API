@@ -3,25 +3,15 @@ const {
   Checkbox,
   CalendarDay,
   Relationship,
-  File,
 } = require("@keystonejs/fields");
 const access = require("../access.control");
-const { initFileAdapter } = require("./localFileAdapter");
-
-const { fileAdapter, hooks } = initFileAdapter();
 
 const Blog = {
   fields: {
     title: { type: Text },
     content: { type: Text },
     shortDescription: { type: Text },
-    image: {
-      type: File,
-      adapter: fileAdapter,
-      hooks: {
-        beforeChange: hooks.removeExistingFile,
-      },
-    },
+    image: { type: Relationship, ref: "Image" },
     author: { type: Relationship, ref: "Manager" },
     status: { type: Checkbox },
     major: { type: Relationship, ref: "Major" },
@@ -45,7 +35,6 @@ const Blog = {
       if (operation === "create") resolvedData.author = context.authedItem.id;
       return resolvedData;
     },
-    afterDelete: hooks.removeExistingFile,
   },
 };
 

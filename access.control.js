@@ -23,12 +23,18 @@ const userIsOwnerOrAdminOrStaff = (auth) => {
   return managerIsAdminOrStaff(auth) || userOwnsItem(auth) ;
 };
 
+const userAuthed = ({ authentication: { item: user } }) => {
+  console.log(user ? user.username : "undefined");
+  return Boolean(user);
+};
+
 const access = {
   managerIsAdmin,
   managerIsStaff,
   managerIsAdminOrStaff,
   userOwnsItem,
   userIsOwnerOrAdminOrStaff,
+  userAuthed,
 };
 
 module.exports = access;

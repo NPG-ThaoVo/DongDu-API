@@ -6,6 +6,8 @@ const Comment = {
     content: { type: Text },
     user: { type: Relationship, ref: "User", many: false },
     blog: { type: Relationship, ref: "Blog.comment", many: false },
+    fullname: { type: Text },
+    email: { type: Text },
     createdAt: {
       type: CalendarDay,
       dateFrom: "2001-01-16",
@@ -14,7 +16,7 @@ const Comment = {
   access: {
     read: true,
     update: access.userIsOwnerOrAdminOrStaff,
-    create: access.userIsOwnerOrAdminOrStaff,
+    // create: access.userIsOwnerOrAdminOrStaff,
     delete: access.managerIsAdminOrStaff,
   },
 };

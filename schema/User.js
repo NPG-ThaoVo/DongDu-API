@@ -21,7 +21,7 @@ const User = {
       access: { read: access.userIsOwnerOrAdminOrStaff },
     },
     fullname: { type: Text },
-    email: { type: Text },
+    email: { type: Text, isUnique: true, sparse: true },
     avatar: {
       type: Relationship,
       ref: "Image",

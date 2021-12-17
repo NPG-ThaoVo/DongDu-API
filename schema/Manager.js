@@ -3,13 +3,9 @@ const {
   Password,
   CalendarDay,
   Select,
-  File,
+  Relationship,
 } = require("@keystonejs/fields");
 const access = require("../access.control");
-const { initFileAdapter } = require("./localFileAdapter");
-
-const { fileAdapter, hooks } = initFileAdapter();
-
 const User = {
   fields: {
     username: { type: Text, isUnique: true },
@@ -17,13 +13,7 @@ const User = {
       type: Password,
     },
     fullname: { type: Text },
-    avatar: {
-      type: File,
-      adapter: fileAdapter,
-      hooks: {
-        beforeChange: hooks.removeExistingFile,
-      },
-    },
+    avatar: { type: Relationship, ref: "Image" },
     gender: { type: Text },
     yearOfBirth: { type: Text },
     createdAt: {
@@ -48,9 +38,6 @@ const User = {
     create: access.managerIsAdmin,
     delete: access.managerIsAdmin,
     auth: true,
-  },
-  hooks: {
-    afterDelete: hooks.removeExistingFile,
   },
 };
 

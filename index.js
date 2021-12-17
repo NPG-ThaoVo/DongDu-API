@@ -8,9 +8,6 @@ const extendGrapQL = require("./extendGraphQL");
 
 const { PROJECT_NAME, COOKIE_SECRET, DB_CONNECTION } = require("./config");
 
-const { FIND_SOCIAL_USER } = require("./queries/query");
-const { CREATE_SOCIAL_USER } = require("./queries/mutation");
-
 const UserSchema = require("./schema/User");
 const ManagerSchema = require("./schema/Manager");
 const ContactSchema = require("./schema/Contact");
@@ -18,6 +15,7 @@ const MajorSchema = require("./schema/Major");
 const CommentSchema = require("./schema/Comment");
 const BlogSchema = require("./schema/Blog");
 const StatisticalSchema = require("./schema/Statistical");
+const ImageChema = require("./schema/Image");
 const { initialAction } = require("./inital-data");
 // const access = require("./access.control");
 
@@ -52,6 +50,7 @@ const listSchema = [
   { name: "Comment", schema: CommentSchema },
   { name: "Blog", schema: BlogSchema },
   { name: "Statistical", schema: StatisticalSchema },
+  { name: "Image", schema: ImageChema },
 ];
 
 listSchema.map(({ name, schema }) => keystone.createList(name, schema));
@@ -99,13 +98,5 @@ keystone.extendGraphQLSchema(extendGrapQL);
 
 module.exports = {
   keystone,
-  apps: [
-    new GraphQLApp(),
-    ...adminUI,
-    new StaticApp({
-      path: "/",
-      src: "./public",
-      // fallback: 'index.html',
-    }),
-  ],
+  apps: [new GraphQLApp(), ...adminUI],
 };

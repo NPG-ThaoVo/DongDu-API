@@ -1,3 +1,6 @@
+const { FIND_SOCIAL_USER } = require("./queries/query");
+const { CREATE_SOCIAL_USER } = require("./queries/mutation");
+
 module.exports = {
   mutations: [
     {

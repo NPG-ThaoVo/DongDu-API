@@ -1,19 +1,13 @@
-const { Text, Integer, File } = require("@keystonejs/fields");
+const { Text, Integer, Relationship } = require("@keystonejs/fields");
 const access = require("../access.control");
-const { initFileAdapter } = require("./localFileAdapter");
-
-const { fileAdapter, hooks } = initFileAdapter();
 
 const Statistical = {
   fields: {
     title: { type: Text },
     lesson: { type: Integer },
     icon: {
-      type: File,
-      adapter: fileAdapter,
-      hooks: {
-        beforeChange: hooks.removeExistingFile,
-      },
+      type: Relationship,
+      ref: "Image",
     },
     order: {
       type: Integer,
@@ -24,9 +18,6 @@ const Statistical = {
     update: access.managerIsAdminOrStaff,
     create: access.managerIsAdminOrStaff,
     delete: access.managerIsAdmin,
-  },
-  hooks: {
-    afterDelete: hooks.removeExistingFile,
   },
 };
 

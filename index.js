@@ -98,13 +98,5 @@ keystone.extendGraphQLSchema(extendGrapQL);
 
 module.exports = {
   keystone,
-  apps: [
-    new GraphQLApp(),
-    ...adminUI,
-    new StaticApp({
-      path: "/",
-      src: "./public",
-      // fallback: 'index.html',
-    }),
-  ],
+  apps: [new GraphQLApp(), ...adminUI],
 };

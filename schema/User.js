@@ -6,7 +6,6 @@ const {
   Checkbox,
   Select,
 } = require("@keystonejs/fields");
-const { managerIsAdminOrStaff } = require("../access.control");
 const access = require("../access.control");
 
 const User = {
@@ -51,7 +50,7 @@ const User = {
       defaultValue: false,
       access: {
         read: true,
-        update: managerIsAdminOrStaff,
+        update: access.managerIsAdminOrStaff,
         delete: false,
       },
     },

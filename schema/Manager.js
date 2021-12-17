@@ -43,9 +43,9 @@ const User = {
   labelField: "fullname",
   // List-level access controls
   access: {
-    read: access.managerIsAdmin,
-    update: access.managerIsAdmin,
-    create: access.managerIsAdmin,
+    read: access.managerIsAdminOrStaff,
+    update: access.managerIsAdminOrStaff,
+    create: access.managerIsAdminOrStaff,
     delete: access.managerIsAdmin,
     auth: true,
   },

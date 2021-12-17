@@ -11,21 +11,30 @@ const managerIsAdminOrStaff = (auth) => {
   return isAdmin || isStaff;
 };
 
-const userOwnsItem = ({ authentication: { item: user } }) => {
+const userOwnsItem = ({ existingItem, authentication: { item: user } }) => {
   if (!user) return false;
 
   // Instead of a boolean, you can return a GraphQL query:
   // https://www.keystonejs.com/api/access-control#graphqlwhere
-  return { id: user.id };
+  // return { id: user.id };
+  return existingItem.id == user.id;
 };
 
 const userIsOwnerOrAdminOrStaff = (auth) => {
-  return managerIsAdminOrStaff(auth) || userOwnsItem(auth) ;
+  return managerIsAdminOrStaff(auth) || userOwnsItem(auth);
 };
 
 const userAuthed = ({ authentication: { item: user } }) => {
   console.log(user ? user.username : "undefined");
   return Boolean(user);
+};
+
+const userIsPublic = () => {
+  return { OBOG: true };
+};
+
+const userIsOwnerOrPublic = (auth) => {
+  return userOwnsItem(auth) || { OBOG: true };
 };
 
 const access = {
@@ -35,6 +44,8 @@ const access = {
   userOwnsItem,
   userIsOwnerOrAdminOrStaff,
   userAuthed,
+  userIsPublic,
+  userIsOwnerOrPublic,
 };
 
 module.exports = access;

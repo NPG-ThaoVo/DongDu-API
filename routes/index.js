@@ -94,6 +94,11 @@ router.get("/upload", (req, res) => {
 });
 
 router.post("/upload", upload.single("image"), async (req, res) => {
+  if (!req.file) {
+    res.status(400);
+    return res.json({ error: "No image found" });
+  }
+
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "authorization,content-type");
@@ -102,7 +107,7 @@ router.post("/upload", upload.single("image"), async (req, res) => {
     "GET,HEAD,PUT,PATCH,POST,DELETE"
   );
   res.type("application/json");
-  req.file.publicUrl = "/resource/gridfs/" + req.file.filename;
+  req.file.publicUrl = "/resource/gridfs/" + req.file?.filename;
   res.send(JSON.stringify(req.file));
 });
 

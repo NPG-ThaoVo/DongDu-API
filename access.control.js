@@ -16,8 +16,7 @@ const userOwnsItem = ({ existingItem, authentication: { item: user } }) => {
 
   // Instead of a boolean, you can return a GraphQL query:
   // https://www.keystonejs.com/api/access-control#graphqlwhere
-  // return { id: user.id };
-  return existingItem.id == user.id;
+  return existingItem ? existingItem.id == user.id : { id: user.id };
 };
 
 const userIsOwnerOrAdminOrStaff = (auth) => {

@@ -17,6 +17,7 @@ const BlogSchema = require("./schema/Blog");
 const StatisticalSchema = require("./schema/Statistical");
 const ImageChema = require("./schema/Image");
 const { initialAction } = require("./inital-data");
+const router = require("./routes");
 // const access = require("./access.control");
 
 const mode = process.env.NODE_ENV == "development";
@@ -27,8 +28,10 @@ const adapterConfig = {
   mongoUri: mongoUri,
 };
 
+const adapter = new Adapter(adapterConfig);
+
 const keystone = new Keystone({
-  adapter: new Adapter(adapterConfig),
+  adapter,
   // sessionStore: ,
   onConnect: process.env.INIT_DATA && initialAction,
   cookieSecret: COOKIE_SECRET,
@@ -99,4 +102,7 @@ keystone.extendGraphQLSchema(extendGrapQL);
 module.exports = {
   keystone,
   apps: [new GraphQLApp(), ...adminUI],
+  configureExpress: (app) => {
+    app.use("/", router);
+  },
 };

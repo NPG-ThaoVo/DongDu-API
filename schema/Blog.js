@@ -12,7 +12,7 @@ const Blog = {
     content: { type: Text },
     shortDescription: { type: Text },
     image: { type: Relationship, ref: "Image" },
-    author: { type: Relationship, ref: "Manager" },
+    author: { type: Text },
     status: { type: Checkbox },
     major: { type: Relationship, ref: "Major" },
     majorDetails: { type: Text },
@@ -30,12 +30,12 @@ const Blog = {
     delete: access.managerIsAdmin,
     // auth: true,
   },
-  hooks: {
-    resolveInput: ({ resolvedData, context, operation, ...others }) => {
-      if (operation === "create") resolvedData.author = context.authedItem.id;
-      return resolvedData;
-    },
-  },
+  // hooks: {
+  //   resolveInput: ({ resolvedData, context, operation, ...others }) => {
+  //     if (operation === "create") resolvedData.author = context.authedItem.id;
+  //     return resolvedData;
+  //   },
+  // },
 };
 
 module.exports = Blog;

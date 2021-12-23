@@ -126,7 +126,7 @@ router.get("/resource/gridfs/:filename", async (req, res) => {
     .toArray()
     .then((data = []) => {
       if (data.length <= 0) return res.json({ error: "File does not exist!" });
-
+      res.setHeader("Content-type", data[0]?.contentType);
       return bucket.openDownloadStream(data[0]._id).pipe(res);
     });
 });

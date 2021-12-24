@@ -14,10 +14,19 @@ const CLIENT_URL =
   process.env.NODE_ENV === "production"
     ? "https://dong-du.vercel.app/"
     : "http://localhost:3000";
+const MAIL_USERNAME = 'dongdumientrung@gmail.com';
+const MAIL_PASSWORD = 'DongDuMienTrung';
+
+const JWT_SECRET = 'OBDD-MIENTRUNG';
+const JWT_TTL = '15m';
 module.exports = {
   PROJECT_NAME,
   COOKIE_SECRET,
   DB_CONNECTION,
   DB_FILE_CONNECTION,
   CLIENT_URL,
+  MAIL_USERNAME,
+  MAIL_PASSWORD,
+  JWT_SECRET,
+  JWT_TTL
 };

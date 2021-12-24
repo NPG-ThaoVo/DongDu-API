@@ -35,6 +35,16 @@ const FIND_SOCIAL_USER = gql`
   }
 `;
 
+const FIND_USER_BY_EMAIL = gql`
+  query($email: String) {
+    allUsers(where: { email: $email }) {
+      id
+      email
+      provider
+    }
+  }
+`;
 
 
-module.exports = { FIND_SOCIAL_USER }
+
+module.exports = { FIND_SOCIAL_USER, FIND_USER_BY_EMAIL }

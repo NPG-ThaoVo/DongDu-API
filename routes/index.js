@@ -1,8 +1,13 @@
 const express = require("express");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
-
+const { FIND_USER_BY_EMAIL } = require('../queries/query');
+const { UPDATE_USER } = require('../queries/mutation');
+const { sendEmailResetPassword } = require('../services/mail');
 const { MongoClient, GridFSBucket } = require("mongodb");
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET, JWT_TTL } = require('../config');
+const cors = require('cors')
 
 function nonAccentVietnamese(str) {
   str = str.toLowerCase();
@@ -44,6 +49,14 @@ const bucketName = "fs";
 
 const { DB_FILE_CONNECTION } = require("../config");
 const router = express.Router();
+router.use(cors({
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
+}));
+
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 // const connection = mongoose.connect(DB_FILE_CONNECTION);
 let bucket;
@@ -130,5 +143,90 @@ router.get("/resource/gridfs/:filename", async (req, res) => {
       return bucket.openDownloadStream(data[0]._id).pipe(res);
     });
 });
+
+router.post('/password-reset', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (email === '') res.json({ success: false, message: 'Email is required' });
+    const app = req.app;
+    const keystone = app.get('keystoneInstance');
+    const context = keystone.createContext().sudo();
+
+    const { data } = await context.executeGraphQL({
+      query: FIND_USER_BY_EMAIL,
+      variables: {
+        email: email
+      },
+    });
+
+    if (data?.allUsers?.length === 0) {
+      res.json({ success: false, message: 'That address is either invalid, not a verified primary email or is not associated with a personal user account!' });
+    } else {
+      const provider = data?.allUsers[0]?.provider ?? "";
+      const userId = data?.allUsers[0]?.id ?? "";
+      if (provider === 'local') {
+        const token = jwt.sign({ id: userId, email }, JWT_SECRET, { expiresIn: JWT_TTL });
+        await sendEmailResetPassword(email, token);
+        res.json({
+          success: true,
+          message: 'Email was sent',
+        });
+      } else {
+        res.json({
+          success: false,
+          message: 'Email address that you provided is not available on this service. Please provide a valid email address',
+        });
+      }
+    }
+
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: 'An error occurred',
+      error
+    });
+  }
+});
+
+router.post('/verify-token', (req, res) => {
+  try {
+    const { token } = req.body;
+    const data = jwt.verify(token, JWT_SECRET);
+    if (data) res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, error: error.message });
+  }
+});
+
+router.post('/change-password', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if(password === '') res.json({ success: false, message: 'Password is required' });
+
+    const app = req.app;
+    const keystone = app.get('keystoneInstance');
+    const context = keystone.createContext().sudo();
+    app.use(cors({ origin: '*' }));
+    const dataEncoded = jwt.verify(token, JWT_SECRET);
+    if (dataEncoded) {
+      const id = dataEncoded.id;
+      const { data } = await context.executeGraphQL({
+        query: UPDATE_USER,
+        variables: {
+          id,
+          data: {
+            password
+          }
+        },
+      });
+      res.json({ success: true, data });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, error: error.message });
+  }
+})
 
 module.exports = router;

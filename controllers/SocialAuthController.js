@@ -1,7 +1,7 @@
 const { CLIENT_URL } = require('../config');
-const { keystone } = require('../index');
-const { FIND_SOCIAL_USER } = require('../queries/query');
 const { CREATE_SOCIAL_USER, AUTHENTICATION_USER } = require('../queries/mutation');
+const { FIND_SOCIAL_USER } = require('../queries/query');
+const { keystone } = require('../index');
 const context = keystone.createContext().sudo()
 
 

@@ -38,6 +38,12 @@ const AUTHENTICATION_USER = gql`
   }
 `;
 
-const FIND_SOCIAL_USER = 
+const UPDATE_USER = gql`
+  mutation ($id: ID!, $data: UserUpdateInput) {
+    userdata: updateUser(id: $id, data: $data) {
+      email
+      id
+    }
+}`
 
-module.exports = { CREATE_SOCIAL_USER, AUTHENTICATION_USER }
+module.exports = { CREATE_SOCIAL_USER, AUTHENTICATION_USER, UPDATE_USER }

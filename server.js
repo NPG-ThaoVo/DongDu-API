@@ -1,6 +1,6 @@
 const express = require('express');
 const { keystone, apps } = require('./index');
-const route = require('./routes');
+// const route = require('./routes');
 const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors')
@@ -24,7 +24,7 @@ keystone.prepare({
     }));
     
 
-    route(app);
+    // route(app);
 
     app.use(middlewares)
     app.listen(3001);

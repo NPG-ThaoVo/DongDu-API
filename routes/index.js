@@ -162,7 +162,7 @@ router.post('/password-reset', async (req, res, next) => {
     if (data?.allUsers?.length === 0) {
       res.json({ success: false, message: 'That address is either invalid, not a verified primary email or is not associated with a personal user account!' });
     } else {
-      const provider = data?.allUsers[0]?.provider ?? "";
+      const provider = data?.allUsers[0]?.provider ?? ""; // local | facebook | google
       const userId = data?.allUsers[0]?.id ?? "";
       if (provider === 'local') {
         const token = jwt.sign({ id: userId, email }, JWT_SECRET, { expiresIn: JWT_TTL });

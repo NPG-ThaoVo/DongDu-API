@@ -7,25 +7,11 @@ const FIND_SOCIAL_USER = gql`
       password_is_set
       fullname
       email
-      avatar {
-        path
-        filename
-        id
-        originalFilename
-        mimetype
-        encoding
-        publicUrl
-      }
-      email
       gender
       yearOfBirth
       course
       majorDetail
       note
-      major {
-        id
-        name
-      }
       createdAt
       OBOG
       socialId

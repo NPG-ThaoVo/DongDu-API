@@ -18,7 +18,7 @@ module.exports = {
           if (error) {
             throw error;
           }
-          if (!data?.allUsers[0]) {
+          if (!(data && data.allUsers[0])) {
             const { data, error, ...others } = await context.executeGraphQL({
               query: CREATE_SOCIAL_USER,
               variables: {

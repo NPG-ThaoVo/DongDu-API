@@ -165,8 +165,7 @@ router.post("/password-reset", async (req, res, next) => {
     if (data && data.allUsers && data.allUsers.length === 0) {
       res.json({
         success: false,
-        message:
-          "That address is either invalid, not a verified primary email or is not associated with a personal user account!",
+        message: "Địa chỉ Email chưa được đăng ký trong hệ thống!",
       });
     } else {
       const provider =
@@ -182,13 +181,13 @@ router.post("/password-reset", async (req, res, next) => {
         await sendEmailResetPassword(email, token);
         res.json({
           success: true,
-          message: "Email was sent",
+          message: "Email đã được gửi!",
         });
       } else {
         res.json({
           success: false,
           message:
-            "Email address that you provided is not available on this service. Please provide a valid email address",
+            "Địa chỉ email bạn đã cung cấp không có sẵn trên dịch vụ này. Vui lòng cung cấp một địa chỉ email hợp lệ!",
         });
       }
     }

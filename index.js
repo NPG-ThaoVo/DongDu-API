@@ -45,6 +45,7 @@ const keystone = new Keystone({
   },
 });
 
+
 const listSchema = [
   { name: "User", schema: UserSchema },
   { name: "Manager", schema: ManagerSchema },
@@ -103,6 +104,7 @@ module.exports = {
   keystone,
   apps: [new GraphQLApp(), ...adminUI],
   configureExpress: (app) => {
+    
     app.set('keystoneInstance', keystone);
     app.use("/", router);
   },

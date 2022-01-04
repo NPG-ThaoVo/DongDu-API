@@ -72,7 +72,7 @@ const authUserStrategy = keystone.createAuthStrategy({
   type: PasswordAuthStrategy,
   list: "User",
   config: {
-    identityField: "username",
+    identityField: "email",
     secretField: "password",
   },
 });

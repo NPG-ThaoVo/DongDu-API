@@ -13,7 +13,7 @@ const User = {
     username: {
       type: Text,
       isUnique: true,
-      // access: { read: access.userIsOwnerOrAdminOrStaff },
+      // access: { read: access.userIsOwnerOrAdminOrStaff }, 
     },
     password: {
       type: Password,

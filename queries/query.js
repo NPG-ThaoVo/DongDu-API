@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express');
 const FIND_SOCIAL_USER = gql`
-  query($socialId: String) {
-    allUsers(where: { socialId: $socialId }) {
+  query($email: String) {
+    allUsers(where: { email: $email }) {
       id
       username
       password_is_set

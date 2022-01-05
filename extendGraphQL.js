@@ -11,7 +11,7 @@ module.exports = {
           const { data, error, ...others } = await context.executeGraphQL({
             query: FIND_SOCIAL_USER,
             variables: {
-              email: user.email,
+              email: user.email || id,
             },
             context: context.createContext({ skipAccessControl: true }),
           });
@@ -25,7 +25,7 @@ module.exports = {
                 socialId: id,
                 fullname: user.fullname,
                 provider: user.provider,
-                email: user.email,
+                email: user.email || id,
                 socialInfo: user.socialInfo,
               },
               context: context.createContext({ skipAccessControl: true }),

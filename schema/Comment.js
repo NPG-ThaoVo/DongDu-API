@@ -6,6 +6,7 @@ const Comment = {
     content: { type: Text },
     user: { type: Relationship, ref: "User", many: false },
     blog: { type: Relationship, ref: "Blog.comment", many: false },
+    parentId: { type: Text },
     fullname: { type: Text },
     email: { type: Text },
     createdAt: {

@@ -94,9 +94,8 @@ const adminUIForManager = new AdminUIApp({
 });
 
 // I dont know why it works, if we don't change the order based on ENV, we wont be able to access the AdminUI
-const adminUI = mode
-  ? [adminUIForManager, adminUIForUser]
-  : [adminUIForUser, adminUIForManager];
+const adminUI = [adminUIForManager, adminUIForUser];
+  // [adminUIForUser, adminUIForManager];
 
 keystone.extendGraphQLSchema(extendGrapQL);
 
@@ -104,7 +103,6 @@ module.exports = {
   keystone,
   apps: [new GraphQLApp(), ...adminUI],
   configureExpress: (app) => {
-    
     app.set('keystoneInstance', keystone);
     app.use("/", router);
   },

@@ -75,8 +75,8 @@ const renderEmailContent = (resetUrl, forgotPasswordUrl) => {
 }
 
 const sendEmailResetPassword = async (email, token) => {
-  const resetUrl = `${CLIENT_URL}/password-reset/${token}`;
-  const forgotPasswordUrl = `${CLIENT_URL}/password-reset`;
+  const resetUrl = `${CLIENT_URL}/client-password-reset/${token}`;
+  const forgotPasswordUrl = `${CLIENT_URL}/client-password-reset`;
   const emailContent = renderEmailContent(resetUrl, forgotPasswordUrl)
   let transporter = nodemailer.createTransport({
     service: 'Gmail',

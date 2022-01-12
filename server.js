@@ -19,6 +19,7 @@ keystone
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(passport.initialize());
+   
     app.use(
       session({
         secret: "secret",
@@ -27,7 +28,7 @@ keystone
       })
     );
     app.use("/", route);
-
+    app.set('keystoneInstance', keystone);
     app.use(middlewares);
     app.listen(3001);
   });

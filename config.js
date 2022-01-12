@@ -13,7 +13,7 @@ const DB_FILE_CONNECTION = `mongodb+srv://${ROOT_USERNAME}:${ROOT_PASSWORD}@clus
 const CLIENT_URL =
   process.env.NODE_ENV === "production"
     ? "https://dong-du.vercel.app/"
-    : "http://localhost:3000";
+    : "https://obdd-mientrung.com";
 const MAIL_USERNAME = 'dongdumientrung@gmail.com';
 const MAIL_PASSWORD = 'DongDuMienTrung';
 
